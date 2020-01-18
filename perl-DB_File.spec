@@ -1,11 +1,14 @@
 Name:           perl-DB_File
 Version:        1.830
-Release:        3%{?dist}
+Release:        6%{?dist}
 Summary:        Perl5 access to Berkeley DB version 1.x
 License:        GPL+ or Artistic
 Group:          Development/Libraries
 URL:            http://search.cpan.org/dist/DB_File/
 Source0:        http://www.cpan.org/authors/id/P/PM/PMQS/DB_File-%{version}.tar.gz
+# Destroy DB_File objects only from original thread context, bug #1107728,
+# CPAN RT#96357
+Patch0:         DB_File-1.831-Destroy-DB_File-objects-only-from-original-thread-co.patch
 BuildRequires:  libdb-devel
 BuildRequires:  perl
 BuildRequires:  perl(Config)
@@ -24,10 +27,11 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(XSLoader)
 # Tests:
 BuildRequires:  perl(Symbol)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(threads)
 %if !%{defined perl_bootstrap}
 # Optional tests:
 # Data::Dumper not useful
-BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Pod) >= 1.00
 %endif
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -44,6 +48,7 @@ interface defined here mirrors the Berkeley DB interface closely.
 
 %prep
 %setup -q -n DB_File-%{version}
+%patch0 -p1
 find -type f -exec chmod -x {} +
 %fix_shbang_line dbinfo
 
@@ -67,6 +72,15 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Fri Aug 08 2014 Petr Pisar <ppisar@redhat.com> - 1.830-6
+- Build-require Test::More always because of the new thread tests
+
+* Thu Aug 07 2014 Petr Pisar <ppisar@redhat.com> - 1.830-5
+- Initialize db_DESTROY return variable (bug #1107728)
+
+* Fri Jun 13 2014 Petr Pisar <ppisar@redhat.com> - 1.830-4
+- Destroy DB_File objects only from original thread context (bug #1107728)
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.830-3
 - Mass rebuild 2014-01-24
 
