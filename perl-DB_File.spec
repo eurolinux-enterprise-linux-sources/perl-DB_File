@@ -1,6 +1,6 @@
 Name:           perl-DB_File
 Version:        1.830
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Perl5 access to Berkeley DB version 1.x
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -67,6 +67,12 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.830-3
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.830-2
+- Mass rebuild 2013-12-27
+
 * Mon Nov 04 2013 Petr Pisar <ppisar@redhat.com> - 1.830-1
 - 1.830 bump (bug #1026266)
 
